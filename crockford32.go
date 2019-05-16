@@ -11,7 +11,7 @@ import (
 )
 
 var (
-	//encoding is a list of characters are encoded in upper case
+	//encoding is a list of upper case characters used in encoding
 	encoding = "0123456789ABCDEFGHJKMNPQRSTVWXYZ"
 
 	//decoding is an array of characters and the mapped int64 value, used for decoding
