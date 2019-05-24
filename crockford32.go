@@ -43,60 +43,63 @@ var (
 )
 
 //Encode takes an int64 and returns the equivalent Crockford32 encoded string
-func Encode(n int64) (string, error) {
-	if n < 0 {
-		return "", errEncodeNegativeInt(n)
-	}
-
-	if n == 0 {
+func Encode(input int64) (string, error) {
+	if input == 0 {
 		return "0", nil
 	}
 
-	var j int
+	if input > 0 {
+		count := 0
 
-	runes := make([]byte, 13)
-	for i := n; i > 0; i, j = i/32, j+1 {
-		runes[j] = encoding[i%32]
+		runes := make([]byte, 13)
+		for ; input > 0; input = input / 32 {
+			runes[count] = encoding[input%32]
+			count++
+		}
+		runes = runes[0:count]
+
+		for i, j := 0, len(runes)-1; i < j; i, j = i+1, j-1 {
+			runes[i], runes[j] = runes[j], runes[i]
+		}
+
+		return string(runes), nil
 	}
 
-	runes = runes[0:j]
-
-	for i, j := 0, len(runes)-1; i < j; i, j = i+1, j-1 {
-		runes[i], runes[j] = runes[j], runes[i]
-	}
-
-	return string(runes), nil
+	return "", errEncodeNegativeInt(input)
 }
 
 //Decode takes a Crockford32 encoded string and returns the equivalent uint64
-func Decode(s string) (n int64, err error) {
-	if s == "" {
-		return 0, errDecodeEmptyString(s)
+func Decode(input string) (output int64, err error) {
+	if input == "" {
+		return 0, errDecodeEmptyString(input)
 	}
 
-	var invalid string
+	invalid := make([]rune, len(input))
+	count := 0
 
-	for i, r := range s {
-		if (r >= 48 && r <= 57) || (r >= 65 && r <= 90 && r != 85) || (r >= 97 && r <= 122 && r != 117) {
-			n += decoding[r] * powers[len(s)-i-1]
+	for i, r := range input {
+		if (r >= '0' && r <= '9') || (r >= 'a' && r <= 'z' && r != 'u') || (r >= 'A' && r <= 'Z' && r != 'U') {
+			output += decoding[r] * powers[len(input)-i-1]
 		} else {
-			invalid += string(r)
+			invalid[count] = r
+			count++
 		}
 	}
-	if len(invalid) > 0 {
-		return 0, errDecodeInvalidRunes(s, invalid)
+
+	if count > 0 {
+		return 0, errDecodeInvalidRunes(input, invalid[0:count])
 	}
-	return n, nil
+	return output, nil
 }
 
-func errEncodeNegativeInt(n int64) error {
-	return fmt.Errorf(`crockford32.Encode(%d): n must be greater than or equal to zero`, n)
+func errEncodeNegativeInt(input int64) error {
+	return fmt.Errorf(`crockford32.Encode(%d): n must be greater than or equal to zero`, input)
 }
 
-func errDecodeEmptyString(s string) error {
-	return fmt.Errorf(`crockford32.Decode("%s"): empty string`, s)
+func errDecodeEmptyString(input string) error {
+	return fmt.Errorf(`crockford32.Decode("%s"): empty string`, input)
 }
 
-func errDecodeInvalidRunes(s, runes string) error {
-	return fmt.Errorf(`crockford32.Decode("%s"): contains invalid runes [%s]`, s, runes)
+func errDecodeInvalidRunes(input string, invalid []rune) error {
+	return fmt.Errorf(`crockford32.Decode("%s"): contains invalid runes %v`, input, string(invalid))
 }
