@@ -2,8 +2,8 @@
 //Use of this source code is governed by an MIT-style
 //license that can be found in the LICENSE file.
 
-//Package crockford32 is an implementation of Douglas Crockford's
-//Base32 specification (https://www.crockford.com/base32.html)
+// Package crockford32 is an implementation of Douglas Crockford's
+// Base32 specification (https://www.crockford.com/base32.html)
 package crockford32
 
 import (
@@ -11,20 +11,20 @@ import (
 )
 
 var (
-	//encoding is a list of upper case characters used in encoding
+	// encoding is a list of upper case characters used in encoding
 	encoding = "0123456789ABCDEFGHJKMNPQRSTVWXYZ"
 
-	//decoding is an array of characters and the mapped int64 value, used for decoding
+	// decoding is an array of characters and the mapped int64 value, used for decoding
 	decoding = [128]int64{
-		//Singe digit integers runes map to the equivalent integer value
+		// Single digit integers runes map to the equivalent integer value
 		'0': 0, '1': 1, '2': 2, '3': 3, '4': 4, '5': 5, '6': 6, '7': 7, '8': 8, '9': 9,
-		//Mappings according to Crockford32 specification ('L' and 'I' map to 1; 'O' maps to 0; 'U' does not map)
+		// Mappings according to Crockford32 specification ('L' and 'I' map to 1; 'O' maps to 0; 'U' does not map)
 		'A': 10, 'B': 11, 'C': 12, 'D': 13, 'E': 14, 'F': 15, 'G': 16, 'H': 17, 'J': 18, 'K': 19, 'L': 1, 'M': 20, 'N': 21, 'O': 0, 'P': 22, 'Q': 23, 'R': 24, 'S': 25, 'T': 26, 'V': 27, 'W': 28, 'X': 29, 'Y': 30, 'Z': 31,
-		//Lower case maps the same as upper case
+		// Lower case maps the same as upper case
 		'a': 10, 'b': 11, 'c': 12, 'd': 13, 'e': 14, 'f': 15, 'g': 16, 'h': 17, 'j': 18, 'k': 19, 'l': 1, 'm': 20, 'n': 21, 'o': 0, 'p': 22, 'q': 23, 'r': 24, 's': 25, 't': 26, 'v': 27, 'w': 28, 'x': 29, 'y': 30, 'z': 31,
 	}
 
-	//powers is precalculated powers of 32^i, where i is the index of the slice record
+	// powers is precalculated powers of 32^i, where i is the index of the slice record
 	powers = []int64{
 		0:  1,
 		1:  32,
@@ -42,7 +42,9 @@ var (
 	}
 )
 
-//Encode takes an int64 and returns the equivalent Crockford32 encoded string
+// Encode takes an int64 and returns the equivalent Crockford32 encoded string and an error, if any
+// Encode encodes the given int64 input into a base32 string using the Crockford encoding scheme.
+// If the input is 0, it returns "0" and no error. If the input is negative, it returns an empty string and an error.
 func Encode(input int64) (string, error) {
 	if input == 0 {
 		return "0", nil
@@ -68,7 +70,8 @@ func Encode(input int64) (string, error) {
 	return "", errEncodeNegativeInt(input)
 }
 
-//Decode takes a Crockford32 encoded string and returns the equivalent uint64
+// Decode decodes a Crockford Base32 encoded string into an int64.
+// It returns the decoded int64 and an error if the input string is empty or contains invalid runes.
 func Decode(input string) (output int64, err error) {
 	if input == "" {
 		return 0, errDecodeEmptyString(input)
@@ -92,14 +95,19 @@ func Decode(input string) (output int64, err error) {
 	return output, nil
 }
 
+// errEncodeNegativeInt returns an error indicating that the input integer is negative and cannot be encoded using crockford32 encoding.
 func errEncodeNegativeInt(input int64) error {
 	return fmt.Errorf(`crockford32.Encode(%d): n must be greater than or equal to zero`, input)
 }
 
+// errDecodeEmptyString returns an error indicating that the input string is empty.
 func errDecodeEmptyString(input string) error {
 	return fmt.Errorf(`crockford32.Decode("%s"): empty string`, input)
 }
 
+// errDecodeInvalidRunes returns an error indicating that the input string contains invalid runes.
+// The function takes in the input string and a slice of invalid runes and returns a formatted error message.
+// The error message contains the input string and the invalid runes.
 func errDecodeInvalidRunes(input string, invalid []rune) error {
 	return fmt.Errorf(`crockford32.Decode("%s"): contains invalid runes %v`, input, string(invalid))
 }
