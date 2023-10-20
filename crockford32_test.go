@@ -12,6 +12,10 @@ import (
 	"testing"
 )
 
+// TestDecode tests the Decode function by providing a set of inputs and expected outputs.
+// It checks if the actual output and error match the expected output and error.
+// If they don't match, it reports an error.
+// The test cases cover various scenarios such as empty input, valid input, invalid input, and maximum value input.
 func TestDecode(t *testing.T) {
 	type results struct {
 		output int64
@@ -43,6 +47,11 @@ func TestDecode(t *testing.T) {
 	}
 }
 
+// BenchmarkDecode benchmarks the Decode function with different inputs.
+// The first benchmark tests the function with an empty string.
+// The second benchmark tests the function with the maximum length string.
+// The third benchmark tests the function with a string containing invalid runes.
+// The fourth benchmark tests the function with a random input generated using the Encode function.
 func BenchmarkDecode(b *testing.B) {
 	b.Run("Empty", func(b *testing.B) {
 		Decode("")
@@ -65,6 +74,9 @@ func BenchmarkDecode(b *testing.B) {
 	})
 }
 
+// TestEncode tests the Encode function which encodes an int64 to a base32 string.
+// It tests various input values and their expected output values.
+// If the actual output or error does not match the expected output or error, the test fails.
 func TestEncode(t *testing.T) {
 	type results struct {
 		output string
@@ -93,6 +105,9 @@ func TestEncode(t *testing.T) {
 	}
 }
 
+// BenchmarkEncode benchmarks the Encode function with different input values.
+// It tests the performance of encoding the maximum int64 value, zero, negative one, and random int64 values.
+// The function uses the testing.B type to run the benchmarks and measure the performance.
 func BenchmarkEncode(b *testing.B) {
 	b.Run("MaxInt64", func(b *testing.B) {
 		for i := 0; i < b.N; i++ {
