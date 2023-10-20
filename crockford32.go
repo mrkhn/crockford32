@@ -97,17 +97,50 @@ func Decode(input string) (output int64, err error) {
 
 // errEncodeNegativeInt returns an error indicating that the input integer is negative and cannot be encoded using crockford32 encoding.
 func errEncodeNegativeInt(input int64) error {
-	return fmt.Errorf(`crockford32.Encode(%d): n must be greater than or equal to zero`, input)
+	return ErrNegativeInt{input: input}
 }
 
 // errDecodeEmptyString returns an error indicating that the input string is empty.
 func errDecodeEmptyString(input string) error {
-	return fmt.Errorf(`crockford32.Decode("%s"): empty string`, input)
+	return ErrEmptyString{input: input}
 }
 
 // errDecodeInvalidRunes returns an error indicating that the input string contains invalid runes.
 // The function takes in the input string and a slice of invalid runes and returns a formatted error message.
 // The error message contains the input string and the invalid runes.
-func errDecodeInvalidRunes(input string, invalid []rune) error {
-	return fmt.Errorf(`crockford32.Decode("%s"): contains invalid runes %v`, input, string(invalid))
+func errDecodeInvalidRunes(input string, runes []rune) error {
+	return ErrInvalidRunes{input, string(runes)}
+}
+
+// ErrInvalidRunes represents an error that occurs when the input string for decoding contains invalid runes.
+type ErrInvalidRunes struct {
+	input string
+	runes string
+}
+
+// Error returns a string representation of the ErrInvalidRunes error.
+// It formats the error message to include the input string and the invalid runes found during decoding.
+func (e ErrInvalidRunes) Error() string {
+	return fmt.Sprintf(`crockford32.Decode("%s"): contains invalid runes %s`, e.input, e.runes)
+}
+
+// ErrEmptyString is an error type that is returned when an empty string is passed to the Crockford32 encoding function.
+type ErrEmptyString struct {
+	input string
+}
+
+// Error returns the error message for an empty input string.
+func (e ErrEmptyString) Error() string {
+	return fmt.Sprintf(`crockford32.Decode("%s"): empty string`, e.input)
+}
+
+// ErrNegativeInt is an error type that is returned when an input integer is negative.
+type ErrNegativeInt struct {
+	input int64
+}
+
+// Error returns the error message for ErrNegativeInt type.
+// The error message indicates that the input value must be greater than or equal to zero.
+func (e ErrNegativeInt) Error() string {
+	return fmt.Sprintf(`crockford32.Encode(%d): n must be greater than or equal to zero`, e.input)
 }

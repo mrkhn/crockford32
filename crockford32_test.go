@@ -5,6 +5,7 @@
 package crockford32
 
 import (
+	"errors"
 	"fmt"
 	"math"
 	"math/rand"
@@ -36,7 +37,7 @@ func TestDecode(t *testing.T) {
 		t.Run(fmt.Sprint(test.input), func(t *testing.T) {
 			output, err := Decode(test.input)
 			actual := results{output, err}
-			if !reflect.DeepEqual(actual, test.expected) {
+			if actual.output != test.expected.output || !errors.Is(actual.err, test.expected.err) {
 				t.Errorf(`Decode(%v) = %d, "%v"; expected %d, "%v"`, test.input, actual.output, actual.err, test.expected.output, test.expected.err)
 			}
 		})
