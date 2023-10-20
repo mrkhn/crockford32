@@ -9,7 +9,6 @@ import (
 	"fmt"
 	"math"
 	"math/rand"
-	"reflect"
 	"testing"
 )
 
@@ -87,7 +86,7 @@ func TestEncode(t *testing.T) {
 		t.Run(fmt.Sprint(test.input), func(t *testing.T) {
 			output, err := Encode(test.input)
 			actual := results{output, err}
-			if !reflect.DeepEqual(actual, test.expected) {
+			if actual != test.expected || !errors.Is(actual.err, test.expected.err) {
 				t.Errorf("Encode(%v) = %v, expected %v", test.input, actual, test.expected)
 			}
 		})
