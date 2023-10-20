@@ -1,9 +1,9 @@
-//Copyright 2019 Mark A. Hahn. All rights reserved.
-//Use of this source code is governed by an MIT-style
-//license that can be found in the LICENSE file.
+// Copyright 2019 Mark A. Hahn. All rights reserved.
+// Use of this source code is governed by an MIT-style license that can be found in the LICENSE file.
 
-// Package crockford32 is an implementation of Douglas Crockford's
-// Base32 specification (https://www.crockford.com/base32.html)
+// Package crockford32 provides functions to encode and decode int64 values to and from strings according to Douglas Crockford's Base32 specification.
+// Crockford32 (https://www.crockford.com/base32.html) is a variant of Base32 encoding that uses a subset of the alphabet to avoid confusion between visually similar characters.
+// The encoding uses 32 characters, excluding 'I', 'L', 'O', and 'U', which are easily confused with '1', '1', '0', and 'V', respectively.
 package crockford32
 
 import (
