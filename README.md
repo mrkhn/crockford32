@@ -1,2 +1,2 @@
 # crockford32
-Basic Crockford32 encoding for Go 
+Basic Crockford32 encoding for Go
