@@ -1,4 +1,4 @@
-// Copyright 2023 Mark A. Hahn. All rights reserved.
+// Copyright 2025 Mark A. Hahn. All rights reserved.
 // Use of this source code is governed by an MIT-style license that can be found in the LICENSE file.
 
 // Package crockford32 provides functions to convert base 10 integer values to base 32 strings using Douglas Crockford's Base32 character set, for use as human readable identifiers.
