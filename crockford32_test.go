@@ -1,6 +1,5 @@
-//Copyright 2025 Mark A. Hahn. All rights reserved.
-//Use of this source code is governed by an MIT-style
-//license that can be found in the LICENSE file.
+// Copyright 2025 Mark A. Hahn. All rights reserved.
+// Use of this source code is governed by an MIT-style license that can be found in the LICENSE file.
 
 package crockford32
 
@@ -74,6 +73,28 @@ func BenchmarkParse(b *testing.B) {
 	})
 }
 
+// ExampleParse demonstrates how to use the Parse function to decode a Crockford Base32 string.
+func ExampleParse() {
+	// Decode the Crockford Base32 string "10" to its uint64 representation.
+	decoded, err := Parse("10")
+	if err != nil {
+		fmt.Println("Error:", err)
+		return
+	}
+	fmt.Println(decoded)
+	// Output: 32
+}
+
+// ExampleParse_invalid demonstrates how Parse handles invalid input.
+func ExampleParse_invalid() {
+	// Attempt to decode an invalid Crockford Base32 string.
+	_, err := Parse("1!2@3#")
+	if err != nil {
+		fmt.Println(err)
+	}
+	// Output: crockford32.Parse("1!2@3#"): contains invalid runes !@#
+}
+
 func TestFormat(t *testing.T) {
 	tests := []struct {
 		input    uint64
@@ -112,4 +133,20 @@ func BenchmarkFormat(b *testing.B) {
 			Format(rand.Uint64())
 		}
 	})
+}
+
+// ExampleFormat demonstrates how to use the Format function to encode a uint64 to a Crockford Base32 string.
+func ExampleFormat() {
+	// Encode the uint64 value 32 to its Crockford Base32 representation.
+	encoded := Format(32)
+	fmt.Println(encoded)
+	// Output: 10
+}
+
+// ExampleFormat_max demonstrates how to format the maximum value.
+func ExampleFormat_max() {
+	// Encode the maximum int64 value to its Crockford Base32 representation.
+	encoded := Format(math.MaxInt64)
+	fmt.Println(encoded)
+	// Output: 7ZZZZZZZZZZZZ
 }
