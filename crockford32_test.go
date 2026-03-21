@@ -95,6 +95,23 @@ func ExampleParse_invalid() {
 	// Output: crockford32.Parse("1!2@3#"): contains invalid runes !@#
 }
 
+// ExampleErrEmptyString demonstrates the error message for an empty input string.
+func ExampleErrEmptyString() {
+	_, err := Parse("")
+	if err != nil {
+		fmt.Println(err)
+	}
+	// Output: crockford32.Parse(""): empty string
+}
+
+func TestErrEmptyString_Error(t *testing.T) {
+	err := ErrEmptyString{}
+	expected := `crockford32.Parse(""): empty string`
+	if err.Error() != expected {
+		t.Errorf("ErrEmptyString.Error() = %v, expected %v", err.Error(), expected)
+	}
+}
+
 func TestFormat(t *testing.T) {
 	tests := []struct {
 		input    uint64
