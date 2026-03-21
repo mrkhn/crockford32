@@ -53,7 +53,9 @@ func TestParse(t *testing.T) {
 // The fourth benchmark tests the function with a random input generated using the Format function.
 func BenchmarkParse(b *testing.B) {
 	b.Run("Empty", func(b *testing.B) {
-		Parse("")
+		for i := 0; i < b.N; i++ {
+			Parse("")
+		}
 	})
 	b.Run("MaxLength", func(b *testing.B) {
 		for i := 0; i < b.N; i++ {
@@ -125,7 +127,9 @@ func BenchmarkFormat(b *testing.B) {
 	})
 
 	b.Run("Zero", func(b *testing.B) {
-		Format(0)
+		for i := 0; i < b.N; i++ {
+			Format(0)
+		}
 	})
 
 	b.Run("Random", func(b *testing.B) {
