@@ -52,8 +52,8 @@ func Format(input uint64) string {
 
 	runes := make([]byte, 13)
 
-	for ; input > 0; input = input / 32 {
-		runes[count] = encoding[input%32]
+	for ; input > 0; input >>= 5 {
+		runes[count] = encoding[input&31]
 		count++
 	}
 	runes = runes[0:count]
