@@ -72,6 +72,10 @@ func Parse(input string) (output uint64, err error) {
 		return 0, new(ErrEmptyString)
 	}
 
+	if len(input) > len(powers) {
+		return 0, ErrInputTooLong{input}
+	}
+
 	invalid := make([]rune, len(input))
 	count := 0
 
@@ -108,4 +112,14 @@ type ErrEmptyString struct{}
 // Error returns the error message for an empty input string.
 func (e ErrEmptyString) Error() string {
 	return `crockford32.Parse(""): empty string`
+}
+
+// ErrInputTooLong is an error type that is returned when a string longer than 13 characters is passed to the Crockford32 encoding function.
+type ErrInputTooLong struct {
+	input string
+}
+
+// Error returns the error message for an input string that is too long.
+func (e ErrInputTooLong) Error() string {
+	return fmt.Sprintf(`crockford32.Parse("%s"): input too long`, e.input)
 }

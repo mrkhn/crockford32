@@ -34,6 +34,7 @@ func TestParse(t *testing.T) {
 		{input: "*", expected: results{output: 0, err: ErrInvalidRunes{"*", "*"}}},
 		{input: "1!2@3#", expected: results{output: 0, err: ErrInvalidRunes{"1!2@3#", "!@#"}}},
 		{input: "7ZZZZZZZZZZZZ", expected: results{output: math.MaxInt64}},
+		{input: "ABCDEFGHIJKLMNO", expected: results{output: 0, err: ErrInputTooLong{"ABCDEFGHIJKLMNO"}}},
 	}
 	for _, test := range tests {
 		t.Run(fmt.Sprint(test.input), func(t *testing.T) {
