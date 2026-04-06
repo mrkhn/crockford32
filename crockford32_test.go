@@ -95,7 +95,7 @@ func ExampleParse_invalid() {
 	if err != nil {
 		fmt.Println(err)
 	}
-	// Output: crockford32.Parse("1!2@3#"): contains invalid runes !@#
+	// Output: crockford32.Parse("1!2@3#"): contains invalid runes "!@#"
 }
 
 // ExampleErrEmptyString demonstrates the error message for an empty input string.
