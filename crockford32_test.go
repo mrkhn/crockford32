@@ -124,6 +124,7 @@ func TestFormat(t *testing.T) {
 		{input: 10, expected: "A"},
 		{input: 32, expected: "10"},
 		{input: math.MaxInt64, expected: "7ZZZZZZZZZZZZ"},
+		{input: math.MaxUint64, expected: "FZZZZZZZZZZZZ"},
 	}
 
 	for _, test := range tests {
