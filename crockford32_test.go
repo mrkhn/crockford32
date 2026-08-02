@@ -115,6 +115,23 @@ func TestErrEmptyString_Error(t *testing.T) {
 	}
 }
 
+// ExampleErrInputTooLong demonstrates the error message for an input string that is too long.
+func ExampleErrInputTooLong() {
+	_, err := Parse("12345678901234")
+	if err != nil {
+		fmt.Println(err)
+	}
+	// Output: crockford32.Parse("12345678901234"): input too long
+}
+
+func TestErrInputTooLong_Error(t *testing.T) {
+	err := ErrInputTooLong{input: "12345678901234"}
+	expected := `crockford32.Parse("12345678901234"): input too long`
+	if err.Error() != expected {
+		t.Errorf("ErrInputTooLong.Error() = %v, expected %v", err.Error(), expected)
+	}
+}
+
 func TestFormat(t *testing.T) {
 	tests := []struct {
 		input    uint64
