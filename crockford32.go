@@ -103,7 +103,17 @@ type ErrInvalidRunes struct {
 // Error returns a string representation of the ErrInvalidRunes error.
 // It formats the error message to include the input string and the invalid runes found during decoding.
 func (e ErrInvalidRunes) Error() string {
-	return fmt.Sprintf("crockford32.Parse(%.32q): contains invalid runes %.32q", e.input, e.runes)
+	input := e.input
+	if len(input) > 32 {
+		input = input[:32] + "..."
+	}
+
+	runes := e.runes
+	if len(runes) > 32 {
+		runes = runes[:32] + "..."
+	}
+
+	return fmt.Sprintf(`crockford32.Parse(%q): contains invalid runes %q`, input, runes)
 }
 
 // ErrEmptyString is an error type that is returned when an empty string is passed to the Crockford32 encoding function.
@@ -121,5 +131,10 @@ type ErrInputTooLong struct {
 
 // Error returns the error message for an input string that is too long.
 func (e ErrInputTooLong) Error() string {
-	return fmt.Sprintf("crockford32.Parse(%.32q): input too long", e.input)
+	input := e.input
+	if len(input) > 32 {
+		input = input[:32] + "..."
+	}
+
+	return fmt.Sprintf(`crockford32.Parse(%q): input too long`, input)
 }

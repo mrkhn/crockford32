@@ -4,7 +4,6 @@
 package crockford32
 
 import (
-	"errors"
 	"fmt"
 	"math"
 	"math/rand"
@@ -40,7 +39,7 @@ func TestParse(t *testing.T) {
 		t.Run(fmt.Sprint(test.input), func(t *testing.T) {
 			output, err := Parse(test.input)
 			actual := results{output, err}
-			if actual.output != test.expected.output || !errors.Is(actual.err, test.expected.err) {
+			if actual.output != test.expected.output || (actual.err != nil && test.expected.err != nil && actual.err.Error() != test.expected.err.Error()) || (actual.err == nil && test.expected.err != nil) || (actual.err != nil && test.expected.err == nil) {
 				t.Errorf(`Parse(%v) = %d, "%v"; expected %d, "%v"`, test.input, actual.output, actual.err, test.expected.output, test.expected.err)
 			}
 		})
